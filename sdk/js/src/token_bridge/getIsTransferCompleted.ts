@@ -1,5 +1,5 @@
 import { ChainGrpcWasmApi } from "@injectivelabs/sdk-ts";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { Commitment, Connection, PublicKeyInitData } from "@solana/web3.js";
 import { LCDClient } from "@terra-money/terra.js";
 import { Algodv2, bigIntToBytes } from "algosdk";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import { fromUint8Array } from "js-base64";
 import { redeemOnTerra } from ".";
 import { TERRA_REDEEMED_CHECK_WALLET_ADDRESS } from "..";
+import { getClaim } from "../solana/wormhole";
 import {
   BITS_PER_KEY,
   calcLogicSigAccount,
@@ -16,7 +17,7 @@ import {
 import { callFunctionNear } from "../utils/near";
 import { getSignedVAAHash } from "../bridge";
 import { Bridge__factory } from "../ethers-contracts";
-import { importCoreWasm } from "../solana/wasm";
+import { parseVaa, SignedVaa } from "../vaa/wormhole";
 import { safeBigIntToNumber } from "../utils/bigint";
 import { Provider } from "near-api-js/lib/providers";
 import { LCDClient as XplaLCDClient } from "@xpla/xpla.js";
@@ -148,17 +149,20 @@ export async function getIsTransferCompletedXpla(
 }
 
 export async function getIsTransferCompletedSolana(
-  tokenBridgeAddress: string,
-  signedVAA: Uint8Array,
-  connection: Connection
+  tokenBridgeAddress: PublicKeyInitData,
+  signedVAA: SignedVaa,
+  connection: Connection,
+  commitment?: Commitment
 ): Promise<boolean> {
-  const { claim_address } = await importCoreWasm();
-  const claimAddress = await claim_address(tokenBridgeAddress, signedVAA);
-  const claimInfo = await connection.getAccountInfo(
-    new PublicKey(claimAddress),
-    "confirmed"
-  );
-  return !!claimInfo;
+  const parsed = parseVaa(signedVAA);
+  return getClaim(
+    connection,
+    tokenBridgeAddress,
+    parsed.emitterAddress,
+    parsed.emitterChain,
+    parsed.sequence,
+    commitment
+  ).catch((e) => false);
 }
 
 // Algorand

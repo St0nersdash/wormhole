@@ -4,3 +4,4 @@ export * from "./parseVaa";
 export * from "./array";
 export * from "./bigint";
 export * from "./near";
+export * from "./keccak";
