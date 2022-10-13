@@ -24,6 +24,7 @@ type PollFinalizer interface {
 type BlockPollConnector struct {
 	Connector
 	Delay               time.Duration
+	publishSafeBlocks   bool
 	isEthPoS            bool
 	hasEthSwitchedToPoS bool
 	finalizer           PollFinalizer
@@ -32,10 +33,11 @@ type BlockPollConnector struct {
 	errFeed   ethEvent.Feed
 }
 
-func NewBlockPollConnector(ctx context.Context, baseConnector Connector, finalizer PollFinalizer, delay time.Duration, isEthPoS bool) (*BlockPollConnector, error) {
+func NewBlockPollConnector(ctx context.Context, baseConnector Connector, finalizer PollFinalizer, delay time.Duration, isEthPoS bool, publishSafeBlocks bool) (*BlockPollConnector, error) {
 	connector := &BlockPollConnector{
 		Connector:           baseConnector,
 		Delay:               delay,
+		publishSafeBlocks:   publishSafeBlocks,
 		isEthPoS:            isEthPoS,
 		hasEthSwitchedToPoS: false,
 		finalizer:           finalizer,
@@ -50,9 +52,17 @@ func NewBlockPollConnector(ctx context.Context, baseConnector Connector, finaliz
 func (b *BlockPollConnector) run(ctx context.Context) error {
 	logger := supervisor.Logger(ctx).With(zap.String("eth_network", b.Connector.NetworkName()))
 
-	lastBlock, err := b.getBlock(ctx, logger, nil)
+	lastBlock, err := b.getBlock(ctx, logger, nil, false)
 	if err != nil {
 		return err
+	}
+
+	var lastSafeBlock *NewBlock
+	if b.publishSafeBlocks {
+		lastSafeBlock, err = b.getBlock(ctx, logger, nil, true)
+		if err != nil {
+			return err
+		}
 	}
 
 	timer := time.NewTimer(time.Millisecond) // Start immediately.
@@ -65,11 +75,21 @@ func (b *BlockPollConnector) run(ctx context.Context) error {
 			return ctx.Err()
 		case <-timer.C:
 			for count := 0; count < 3; count++ {
-				lastBlock, err = b.pollBlocks(ctx, logger, lastBlock)
+				lastBlock, err = b.pollBlocks(ctx, logger, lastBlock, false)
 				if err == nil {
 					break
 				}
-				logger.Error("polling encountered an error", zap.Error(err))
+				logger.Error("polling of block encountered an error", zap.Error(err))
+			}
+
+			if err == nil && b.publishSafeBlocks {
+				for count := 0; count < 3; count++ {
+					lastSafeBlock, err = b.pollBlocks(ctx, logger, lastSafeBlock, true)
+					if err == nil {
+						break
+					}
+					logger.Error("polling of safe block encountered an error", zap.Error(err))
+				}
 			}
 
 			if err != nil {
@@ -80,7 +100,7 @@ func (b *BlockPollConnector) run(ctx context.Context) error {
 	}
 }
 
-func (b *BlockPollConnector) pollBlocks(ctx context.Context, logger *zap.Logger, lastBlock *NewBlock) (lastPublishedBlock *NewBlock, retErr error) {
+func (b *BlockPollConnector) pollBlocks(ctx context.Context, logger *zap.Logger, lastBlock *NewBlock, safe bool) (lastPublishedBlock *NewBlock, retErr error) {
 	// Some of the testnet providers (like the one we are using for Arbitrum) limit how many transactions we can do. When that happens, the call hangs.
 	// Use a timeout so that the call will fail and the runable will get restarted. This should not happen in mainnet, but if it does, we will need to
 	// investigate why the runable is dying and fix the underlying problem.
@@ -93,7 +113,7 @@ func (b *BlockPollConnector) pollBlocks(ctx context.Context, logger *zap.Logger,
 	// Fetch the latest block on the chain
 	// We could do this on every iteration such that if a new block is created while this function is being executed,
 	// it would automatically fetch new blocks but in order to reduce API load this will be done on the next iteration.
-	latestBlock, err := b.getBlock(timeout, logger, nil)
+	latestBlock, err := b.getBlock(timeout, logger, nil, safe)
 	if err != nil {
 		logger.Error("failed to look up latest block",
 			zap.Uint64("lastSeenBlock", lastBlock.Number.Uint64()), zap.Error(err))
@@ -107,7 +127,7 @@ func (b *BlockPollConnector) pollBlocks(ctx context.Context, logger *zap.Logger,
 
 		// Try to fetch the next block between lastBlock and latestBlock
 		nextBlockNumber := new(big.Int).Add(lastPublishedBlock.Number, big.NewInt(1))
-		block, err := b.getBlock(timeout, logger, nextBlockNumber)
+		block, err := b.getBlock(timeout, logger, nextBlockNumber, safe)
 		if err != nil {
 			logger.Error("failed to fetch next block",
 				zap.Uint64("block", nextBlockNumber.Uint64()), zap.Error(err))
@@ -167,12 +187,16 @@ func (b *BlockPollConnector) SubscribeForBlocks(ctx context.Context, sink chan<-
 	return sub, nil
 }
 
-func (b *BlockPollConnector) getBlock(ctx context.Context, logger *zap.Logger, number *big.Int) (*NewBlock, error) {
+func (b *BlockPollConnector) getBlock(ctx context.Context, logger *zap.Logger, number *big.Int, safe bool) (*NewBlock, error) {
 	var numStr string
 	if number != nil {
 		numStr = ethHexUtils.EncodeBig(number)
 	} else if b.hasEthSwitchedToPoS {
-		numStr = "finalized"
+		if safe {
+			numStr = "safe"
+		} else {
+			numStr = "finalized"
+		}
 	} else {
 		numStr = "latest"
 	}
@@ -200,11 +224,12 @@ func (b *BlockPollConnector) getBlock(ctx context.Context, logger *zap.Logger, n
 	if b.isEthPoS && !b.hasEthSwitchedToPoS && d.Cmp(big.NewInt(0)) == 0 {
 		logger.Info("switching from latest to finalized", zap.Duration("delay", b.Delay))
 		b.SetEthSwitched()
-		return b.getBlock(ctx, logger, number)
+		return b.getBlock(ctx, logger, number, safe)
 	}
 	n := big.Int(*m.Number)
 	return &NewBlock{
 		Number: &n,
 		Hash:   m.Hash,
+		Safe:   safe,
 	}, nil
 }

@@ -17,6 +17,7 @@ import (
 type NewBlock struct {
 	Number *big.Int
 	Hash   common.Hash
+	Safe   bool
 }
 
 // Connector exposes Wormhole-specific interactions with an EVM-based network

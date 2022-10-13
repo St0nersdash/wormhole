@@ -182,7 +182,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
 			return fmt.Errorf("dialing eth client failed: %w", err)
 		}
-		w.ethConn, err = connectors.NewBlockPollConnector(ctx, baseConnector, finalizers.NewDefaultFinalizer(), 250*time.Millisecond, true)
+		w.ethConn, err = connectors.NewBlockPollConnector(ctx, baseConnector, finalizers.NewDefaultFinalizer(), 250*time.Millisecond, true, true)
 		if err != nil {
 			ethConnectionErrors.WithLabelValues(w.networkName, "dial_error").Inc()
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
@@ -196,7 +196,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 			return fmt.Errorf("dialing eth client failed: %w", err)
 		}
 		finalizer := finalizers.NewMoonbeamFinalizer(logger, baseConnector)
-		w.ethConn, err = connectors.NewBlockPollConnector(ctx, baseConnector, finalizer, 250*time.Millisecond, false)
+		w.ethConn, err = connectors.NewBlockPollConnector(ctx, baseConnector, finalizer, 250*time.Millisecond, false, false)
 		if err != nil {
 			ethConnectionErrors.WithLabelValues(w.networkName, "dial_error").Inc()
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
@@ -209,7 +209,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
 			return fmt.Errorf("dialing eth client failed: %w", err)
 		}
-		pollConnector, err := connectors.NewBlockPollConnector(ctx, baseConnector, finalizers.NewDefaultFinalizer(), 250*time.Millisecond, false)
+		pollConnector, err := connectors.NewBlockPollConnector(ctx, baseConnector, finalizers.NewDefaultFinalizer(), 250*time.Millisecond, false, false)
 		if err != nil {
 			ethConnectionErrors.WithLabelValues(w.networkName, "dial_error").Inc()
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
@@ -229,7 +229,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 			return fmt.Errorf("dialing eth client failed: %w", err)
 		}
 		finalizer := finalizers.NewArbitrumFinalizer(logger, baseConnector, baseConnector.Client())
-		pollConnector, err := connectors.NewBlockPollConnector(ctx, baseConnector, finalizer, 250*time.Millisecond, false)
+		pollConnector, err := connectors.NewBlockPollConnector(ctx, baseConnector, finalizer, 250*time.Millisecond, false, false)
 		if err != nil {
 			ethConnectionErrors.WithLabelValues(w.networkName, "dial_error").Inc()
 			p2p.DefaultRegistry.AddErrorCount(w.chainID, 1)
@@ -285,9 +285,10 @@ func (w *Watcher) Run(ctx context.Context) error {
 		}
 	}()
 
-	// Track the current block number so we can compare it to the block number of
+	// Track the current block numbers so we can compare it to the block number of
 	// the message publication for observation requests.
 	var currentBlockNumber uint64
+	var currentSafeBlockNumber uint64
 
 	go func() {
 		for {
@@ -314,11 +315,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 				// always sends the head before it sends the logs (implicit synchronization
 				// by relying on the same websocket connection).
 				blockNumberU := atomic.LoadUint64(&currentBlockNumber)
-				if blockNumberU == 0 {
-					logger.Error("no block number available, ignoring observation request",
-						zap.String("eth_network", w.networkName))
-					continue
-				}
+				safeBlockNumberU := atomic.LoadUint64(&currentSafeBlockNumber)
 
 				timeout, cancel := context.WithTimeout(ctx, 5*time.Second)
 				blockNumber, msgs, err := MessageEventsForTransaction(timeout, w.ethConn, w.contract, w.chainID, tx)
@@ -341,6 +338,43 @@ func (w *Watcher) Run(ctx context.Context) error {
 							zap.String("eth_network", w.networkName),
 						)
 						w.msgChan <- msg
+						continue
+					}
+
+					if msg.ConsistencyLevel == vaa.ConsistencyLevelSafe {
+						if safeBlockNumberU == 0 {
+							logger.Error("no safe block number available, ignoring observation request",
+								zap.String("eth_network", w.networkName))
+							continue
+						}
+
+						if blockNumber <= safeBlockNumberU {
+							logger.Info("re-observed message publication transaction",
+								zap.Stringer("tx", msg.TxHash),
+								zap.Stringer("emitter_address", msg.EmitterAddress),
+								zap.Uint64("sequence", msg.Sequence),
+								zap.Uint64("current_safe_block", safeBlockNumberU),
+								zap.Uint64("observed_block", blockNumber),
+								zap.String("eth_network", w.networkName),
+							)
+							w.msgChan <- msg
+						} else {
+							logger.Info("ignoring re-observed message publication transaction",
+								zap.Stringer("tx", msg.TxHash),
+								zap.Stringer("emitter_address", msg.EmitterAddress),
+								zap.Uint64("sequence", msg.Sequence),
+								zap.Uint64("current_safe_block", safeBlockNumberU),
+								zap.Uint64("observed_block", blockNumber),
+								zap.String("eth_network", w.networkName),
+							)
+						}
+
+						continue
+					}
+
+					if blockNumberU == 0 {
+						logger.Error("no block number available, ignoring observation request",
+							zap.String("eth_network", w.networkName))
 						continue
 					}
 
@@ -491,7 +525,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 					continue
 				}
 				if ev.Number == nil {
-					logger.Error("new header block number is nil", zap.String("eth_network", w.networkName))
+					logger.Error("new header block number is nil", zap.String("eth_network", w.networkName), zap.Bool("is_safe_block", ev.Safe))
 					continue
 				}
 
@@ -500,6 +534,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 				logger.Info("processing new header",
 					zap.Stringer("current_block", ev.Number),
 					zap.Stringer("current_blockhash", currentHash),
+					zap.Bool("is_safe_block", ev.Safe),
 					zap.String("eth_network", w.networkName))
 				currentEthHeight.WithLabelValues(w.networkName).Set(float64(ev.Number.Int64()))
 				readiness.SetReady(w.readiness)
@@ -511,22 +546,41 @@ func (w *Watcher) Run(ctx context.Context) error {
 				w.pendingMu.Lock()
 
 				blockNumberU := ev.Number.Uint64()
-				atomic.StoreUint64(&currentBlockNumber, blockNumberU)
+				if ev.Safe {
+					atomic.StoreUint64(&currentSafeBlockNumber, blockNumberU)
+				} else {
+					atomic.StoreUint64(&currentBlockNumber, blockNumberU)
+				}
 
 				for key, pLock := range w.pending {
-					expectedConfirmations := uint64(pLock.message.ConsistencyLevel)
-					if expectedConfirmations < w.minConfirmations {
-						expectedConfirmations = w.minConfirmations
+					// If this block is safe, only process messages wanting safe.
+					// If it's not safe, only process messages wanting finalized.
+					if ev.Safe != (pLock.message.ConsistencyLevel == vaa.ConsistencyLevelSafe) {
+						continue
+					}
+
+					var expectedConfirmations, maxBlocksToWait uint64
+					if ev.Safe {
+						expectedConfirmations = uint64(0)
+						maxBlocksToWait = uint64(100) // Timeout after an arbitrary number of blocks.
+					} else {
+						expectedConfirmations := uint64(pLock.message.ConsistencyLevel)
+						if expectedConfirmations < w.minConfirmations {
+							expectedConfirmations = w.minConfirmations
+						}
+
+						maxBlocksToWait = 4 * uint64(expectedConfirmations)
 					}
 
 					// Transaction was dropped and never picked up again
-					if pLock.height+4*uint64(expectedConfirmations) <= blockNumberU {
+					if pLock.height+maxBlocksToWait <= blockNumberU {
 						logger.Info("observation timed out",
 							zap.Stringer("tx", pLock.message.TxHash),
 							zap.Stringer("blockhash", key.BlockHash),
 							zap.Stringer("emitter_address", key.EmitterAddress),
 							zap.Uint64("sequence", key.Sequence),
 							zap.Stringer("current_block", ev.Number),
+							zap.Bool("is_safe_block", ev.Safe),
 							zap.Stringer("current_blockhash", currentHash),
 							zap.String("eth_network", w.networkName),
 						)
@@ -556,6 +610,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 								zap.Stringer("emitter_address", key.EmitterAddress),
 								zap.Uint64("sequence", key.Sequence),
 								zap.Stringer("current_block", ev.Number),
+								zap.Bool("is_safe_block", ev.Safe),
 								zap.Stringer("current_blockhash", currentHash),
 								zap.String("eth_network", w.networkName),
 								zap.Error(err))
@@ -574,6 +629,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 								zap.Stringer("emitter_address", key.EmitterAddress),
 								zap.Uint64("sequence", key.Sequence),
 								zap.Stringer("current_block", ev.Number),
+								zap.Bool("is_safe_block", ev.Safe),
 								zap.Stringer("current_blockhash", currentHash),
 								zap.String("eth_network", w.networkName),
 								zap.Error(err))
@@ -590,6 +646,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 								zap.Stringer("emitter_address", key.EmitterAddress),
 								zap.Uint64("sequence", key.Sequence),
 								zap.Stringer("current_block", ev.Number),
+								zap.Bool("is_safe_block", ev.Safe),
 								zap.Stringer("current_blockhash", currentHash),
 								zap.String("eth_network", w.networkName),
 								zap.Error(err))
@@ -606,6 +663,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 								zap.Stringer("emitter_address", key.EmitterAddress),
 								zap.Uint64("sequence", key.Sequence),
 								zap.Stringer("current_block", ev.Number),
+								zap.Bool("is_safe_block", ev.Safe),
 								zap.Stringer("current_blockhash", currentHash),
 								zap.String("eth_network", w.networkName))
 							delete(w.pending, key)
@@ -619,6 +677,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 							zap.Stringer("emitter_address", key.EmitterAddress),
 							zap.Uint64("sequence", key.Sequence),
 							zap.Stringer("current_block", ev.Number),
+							zap.Bool("is_safe_block", ev.Safe),
 							zap.Stringer("current_blockhash", currentHash),
 							zap.String("eth_network", w.networkName))
 						delete(w.pending, key)
@@ -630,6 +689,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 				w.pendingMu.Unlock()
 				logger.Info("processed new header",
 					zap.Stringer("current_block", ev.Number),
+					zap.Bool("is_safe_block", ev.Safe),
 					zap.Stringer("current_blockhash", currentHash),
 					zap.Duration("took", time.Since(start)),
 					zap.String("eth_network", w.networkName))
