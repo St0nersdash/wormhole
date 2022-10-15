@@ -60,6 +60,7 @@ import {
 import { ethers } from "ethers";
 import { NETWORKS } from "./networks";
 import base58 from "bs58";
+import { sha3_256 } from "js-sha3";
 import { execute_algorand } from "./algorand";
 import { execute_injective } from "./injective";
 import { execute_xpla } from "./xpla";
@@ -850,8 +851,11 @@ function parseAddress(chain: ChainName, address: string): string {
   } else if (chain === "sui") {
     throw Error("SUI is not supported yet");
   } else if (chain === "aptos") {
-    // TODO: is there a better native format for aptos?
-    return "0x" + evm_address(address);
+    if (/^(0x)?[0-9a-fA-F]+$/.test(address)) {
+      return "0x" + evm_address(address);
+    }
+
+    return sha3_256(Buffer.from(address)); // address is hash of fully qualified type
   } else if (chain === "wormholechain") {
     return "0x" + tryNativeToHexString(address, chain);
   } else {
