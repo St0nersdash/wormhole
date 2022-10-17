@@ -165,6 +165,8 @@ func (w *Watcher) Run(ctx context.Context) error {
 	timeout, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
+	safeBlocksSupported := false
+
 	var err error
 	if w.chainID == vaa.ChainIDCelo && !w.unsafeDevMode {
 		// When we are running in mainnet or testnet, we need to use the Celo ethereum library rather than go-ethereum.
@@ -176,6 +178,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 			return fmt.Errorf("dialing eth client failed: %w", err)
 		}
 	} else if w.chainID == vaa.ChainIDEthereum && !w.unsafeDevMode {
+		safeBlocksSupported = true
 		baseConnector, err := connectors.NewEthereumConnector(timeout, w.networkName, w.url, w.contract, logger)
 		if err != nil {
 			ethConnectionErrors.WithLabelValues(w.networkName, "dial_error").Inc()
@@ -341,7 +344,7 @@ func (w *Watcher) Run(ctx context.Context) error {
 						continue
 					}
 
-					if msg.ConsistencyLevel == vaa.ConsistencyLevelSafe {
+					if msg.ConsistencyLevel == vaa.ConsistencyLevelSafe && safeBlocksSupported {
 						if safeBlockNumberU == 0 {
 							logger.Error("no safe block number available, ignoring observation request",
 								zap.String("eth_network", w.networkName))
@@ -555,12 +558,14 @@ func (w *Watcher) Run(ctx context.Context) error {
 				for key, pLock := range w.pending {
 					// If this block is safe, only process messages wanting safe.
 					// If it's not safe, only process messages wanting finalized.
-					if ev.Safe != (pLock.message.ConsistencyLevel == vaa.ConsistencyLevelSafe) {
-						continue
+					if safeBlocksSupported {
+						if ev.Safe != (pLock.message.ConsistencyLevel == vaa.ConsistencyLevelSafe) {
+							continue
+						}
 					}
 
 					var expectedConfirmations, maxBlocksToWait uint64
-					if ev.Safe {
+					if ev.Safe && safeBlocksSupported {
 						expectedConfirmations = uint64(0)
 						maxBlocksToWait = uint64(100) // Timeout after an arbitrary number of blocks.
 					} else {
