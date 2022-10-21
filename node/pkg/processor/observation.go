@@ -192,7 +192,7 @@ func (p *Processor) handleObservation(ctx context.Context, m *gossipv1.SignedObs
 		// We have made this observation on chain!
 
 		// 2/3+ majority required for VAA to be valid - wait until we have quorum to submit VAA.
-		quorum := CalculateQuorum(len(gs.Keys))
+		quorum := vaa.CalculateQuorum(len(gs.Keys))
 
 		p.logger.Info("aggregation state for observation",
 			zap.String("digest", hash),
@@ -258,7 +258,7 @@ func (p *Processor) handleInboundSignedVAAWithQuorum(ctx context.Context, m *gos
 	}
 
 	// Verify VAA has enough signatures for quorum
-	quorum := CalculateQuorum(len(p.gs.Keys))
+	quorum := vaa.CalculateQuorum(len(p.gs.Keys))
 	if len(v.Signatures) < quorum {
 		p.logger.Warn("received SignedVAAWithQuorum message without quorum",
 			zap.String("digest", hash),

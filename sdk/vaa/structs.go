@@ -438,6 +438,37 @@ func (v *VAA) VerifySignatures(addresses []common.Address) bool {
 
 	return true
 }
+func (v *VAA) Verify(addresses []common.Address) bool {
+	if addresses == nil {
+		return false
+	}
+
+	// Check if VAA doesn't have any signatures
+	if len(v.Signatures) == 0 {
+		return false
+	}
+
+	// Verify VAA has enough signatures for quorum
+	quorum := CalculateQuorum(len(addresses))
+	if len(v.Signatures) < quorum {
+		return false
+	}
+
+	// Verify VAA signatures to prevent a DoS attack on our local store.
+	if !v.VerifySignatures(addresses) {
+		return false
+	}
+
+	return true
+}
+
+// CalculateQuorum returns the minimum number of guardians that need to sign a VAA for a given guardian set.
+//
+// The canonical source is the calculation in the contracts (solana/bridge/src/processor.rs and
+// ethereum/contracts/Wormhole.sol), and this needs to match the implementation in the contracts.
+func CalculateQuorum(numGuardians int) int {
+	return ((numGuardians*10/3)*2)/10 + 1
+}
 
 // Marshal returns the binary representation of the VAA
 func (v *VAA) Marshal() ([]byte, error) {
