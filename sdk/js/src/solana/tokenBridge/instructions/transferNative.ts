@@ -105,7 +105,7 @@ export function getTransferNativeAccounts(
     authoritySigner: deriveAuthoritySignerKey(tokenBridgeProgramId),
     custodySigner: deriveCustodySignerKey(tokenBridgeProgramId),
     wormholeConfig,
-    wormholeMessage,
+    wormholeMessage: wormholeMessage!,
     wormholeEmitter,
     wormholeSequence,
     wormholeFeeCollector,

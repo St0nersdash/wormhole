@@ -7,7 +7,7 @@ export interface PostMessageCpiAccounts {
    * seeds = ["Bridge"], seeds::program = wormholeProgram
    */
   wormholeConfig: PublicKey;
-  wormholeMessage: PublicKey;
+  wormholeMessage?: PublicKey;
   /**
    * seeds = ["emitter"], seeds::program = cpiProgramId
    */
@@ -39,18 +39,18 @@ export function getPostMessageCpiAccounts(
   cpiProgramId: PublicKeyInitData,
   wormholeProgramId: PublicKeyInitData,
   payer: PublicKeyInitData,
-  message: PublicKeyInitData
+  message?: PublicKeyInitData
 ): PostMessageCpiAccounts {
   const accounts = getPostMessageAccounts(
     wormholeProgramId,
     payer,
     cpiProgramId,
-    message
+    message === undefined ? PublicKey.default : message
   );
   return {
     payer: accounts.payer,
     wormholeConfig: accounts.bridge,
-    wormholeMessage: accounts.message,
+    wormholeMessage: message === undefined ? undefined : accounts.message,
     wormholeEmitter: accounts.emitter,
     wormholeSequence: accounts.sequence,
     wormholeFeeCollector: accounts.feeCollector,
