@@ -120,7 +120,7 @@ export function getTransferWrappedWithPayloadAccounts(
     wrappedMeta: deriveWrappedMetaKey(tokenBridgeProgramId, mint),
     authoritySigner: deriveAuthoritySignerKey(tokenBridgeProgramId),
     wormholeConfig,
-    wormholeMessage: wormholeMessage!,
+    wormholeMessage: wormholeMessage,
     wormholeEmitter,
     wormholeSequence,
     wormholeFeeCollector,

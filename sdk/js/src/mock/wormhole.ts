@@ -1,4 +1,4 @@
-import { keccak256 } from "..";
+import { keccak256 } from "../utils";
 import { ethPrivateToPublic, ethSignWithPrivate } from "./misc";
 
 const SIGNATURE_PAYLOAD_LEN = 66;

@@ -1,13 +1,18 @@
 import { PublicKey, PublicKeyInitData } from "@solana/web3.js";
+import {
+  deriveEmitterSequenceKey,
+  deriveFeeCollectorKey,
+  deriveWormholeEmitterKey,
+  deriveWormholeInfoKey,
+  getEmitterKeys,
+} from "./accounts";
 import { getPostMessageAccounts } from "./instructions";
 
-export interface PostMessageCpiAccounts {
-  payer: PublicKey;
+export interface WormholeDerivedAccounts {
   /**
    * seeds = ["Bridge"], seeds::program = wormholeProgram
    */
   wormholeConfig: PublicKey;
-  wormholeMessage?: PublicKey;
   /**
    * seeds = ["emitter"], seeds::program = cpiProgramId
    */
@@ -20,6 +25,32 @@ export interface PostMessageCpiAccounts {
    * seeds = ["fee_collector"], seeds::program = wormholeProgram
    */
   wormholeFeeCollector: PublicKey;
+}
+
+/**
+ * Generate Wormhole PDAs.
+ *
+ * @param cpiProgramId
+ * @param wormholeProgramId
+ * @returns
+ */
+export function getWormholeDerivedAccounts(
+  cpiProgramId: PublicKeyInitData,
+  wormholeProgramId: PublicKeyInitData
+): WormholeDerivedAccounts {
+  const { emitter: wormholeEmitter, sequence: wormholeSequence } =
+    getEmitterKeys(cpiProgramId, wormholeProgramId);
+  return {
+    wormholeConfig: deriveWormholeInfoKey(wormholeProgramId),
+    wormholeEmitter,
+    wormholeSequence,
+    wormholeFeeCollector: deriveFeeCollectorKey(wormholeProgramId),
+  };
+}
+
+export interface PostMessageCpiAccounts extends WormholeDerivedAccounts {
+  payer: PublicKey;
+  wormholeMessage: PublicKey;
   clock: PublicKey;
   rent: PublicKey;
   systemProgram: PublicKey;
@@ -39,18 +70,18 @@ export function getPostMessageCpiAccounts(
   cpiProgramId: PublicKeyInitData,
   wormholeProgramId: PublicKeyInitData,
   payer: PublicKeyInitData,
-  message?: PublicKeyInitData
+  message: PublicKeyInitData
 ): PostMessageCpiAccounts {
   const accounts = getPostMessageAccounts(
     wormholeProgramId,
     payer,
     cpiProgramId,
-    message === undefined ? PublicKey.default : message
+    message
   );
   return {
     payer: accounts.payer,
     wormholeConfig: accounts.bridge,
-    wormholeMessage: message === undefined ? undefined : accounts.message,
+    wormholeMessage: accounts.message,
     wormholeEmitter: accounts.emitter,
     wormholeSequence: accounts.sequence,
     wormholeFeeCollector: accounts.feeCollector,

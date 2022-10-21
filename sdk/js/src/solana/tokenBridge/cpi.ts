@@ -11,13 +11,20 @@ import {
   parseTokenTransferVaa,
   SignedVaa,
 } from "../../vaa";
-import { deriveClaimKey, derivePostedVaaKey } from "../wormhole";
 import {
+  deriveClaimKey,
+  derivePostedVaaKey,
+  getWormholeDerivedAccounts,
+  WormholeDerivedAccounts,
+} from "../wormhole";
+import {
+  deriveAuthoritySignerKey,
   deriveCustodyKey,
   deriveCustodySignerKey,
   deriveEndpointKey,
   deriveMintAuthorityKey,
   deriveRedeemerAccountKey,
+  deriveSenderAccountKey,
   deriveTokenBridgeConfigKey,
   deriveWrappedMetaKey,
   deriveWrappedMintKey,
@@ -27,48 +34,109 @@ import {
   getTransferWrappedWithPayloadAccounts,
 } from "./instructions";
 
-export interface TransferNativeWithPayloadCpiAccounts {
-  payer: PublicKey;
+export interface TokenBridgeBaseDerivedAccounts {
   /**
    * seeds = ["config"], seeds::program = tokenBridgeProgram
    */
   tokenBridgeConfig: PublicKey;
+}
+
+export interface TokenBridgeBaseNativeDerivedAccounts
+  extends TokenBridgeBaseDerivedAccounts {
   /**
-   * Token account where tokens reside
+   * seeds = ["custody_signer"], seeds::program = tokenBridgeProgram
    */
-  fromTokenAccount: PublicKey;
-  mint: PublicKey;
-  /**
-   * seeds = [mint], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeCustody: PublicKey;
+  tokenBridgeCustodySigner: PublicKey;
+}
+
+export interface TokenBridgeBaseSenderDerivedAccounts
+  extends TokenBridgeBaseDerivedAccounts,
+    WormholeDerivedAccounts {
   /**
    * seeds = ["authority_signer"], seeds::program = tokenBridgeProgram
    */
   tokenBridgeAuthoritySigner: PublicKey;
   /**
-   * seeds = ["custody_signer"], seeds::program = tokenBridgeProgram
+   * seeds = ["sender"], seeds::program = cpiProgramId
    */
-  tokenBridgeCustodySigner: PublicKey;
-  /**
-   * seeds = ["Bridge"], seeds::program = wormholeProgram
-   */
-  wormholeConfig: PublicKey;
-  wormholeMessage: PublicKey;
-  /**
-   * seeds = ["emitter"], seeds::program = tokenBridgeProgram
-   */
-  wormholeEmitter: PublicKey;
-  /**
-   * seeds = ["Sequence", wormholeEmitter], seeds::program = wormholeProgram
-   */
-  wormholeSequence: PublicKey;
-  /**
-   * seeds = ["fee_collector"], seeds::program = wormholeProgram
-   */
-  wormholeFeeCollector: PublicKey;
-  clock: PublicKey;
   tokenBridgeSender: PublicKey;
+}
+
+export interface TokenBridgeNativeSenderDerivedAccounts
+  extends TokenBridgeBaseNativeDerivedAccounts,
+    TokenBridgeBaseSenderDerivedAccounts {}
+
+export interface TokenBridgeWrappedSenderDerivedAccounts
+  extends TokenBridgeBaseSenderDerivedAccounts {}
+
+export interface TokenBridgeBaseRedeemerDerivedAccounts
+  extends TokenBridgeBaseDerivedAccounts {
+  /**
+   * seeds = ["redeemer"], seeds::program = cpiProgramId
+   */
+  tokenBridgeRedeemer: PublicKey;
+}
+
+export interface TokenBridgeNativeRedeemerDerivedAccounts
+  extends TokenBridgeBaseNativeDerivedAccounts,
+    TokenBridgeBaseRedeemerDerivedAccounts {}
+
+export interface TokenBridgeWrappedRedeemerDerivedAccounts
+  extends TokenBridgeBaseRedeemerDerivedAccounts {
+  /**
+   * seeds = ["mint_signer"], seeds::program = tokenBridgeProgram
+   */
+  tokenBridgeMintAuthority: PublicKey;
+}
+
+export interface TokenBridgeDerivedAccounts
+  extends TokenBridgeNativeSenderDerivedAccounts,
+    TokenBridgeWrappedSenderDerivedAccounts,
+    TokenBridgeNativeRedeemerDerivedAccounts,
+    TokenBridgeWrappedRedeemerDerivedAccounts {}
+
+/**
+ * Generate Token Bridge PDAs.
+ *
+ * @param cpiProgramId
+ * @param tokenBridgeProgramId
+ * @param wormholeProgramId
+ * @returns
+ */
+export function getTokenBridgeDerivedAccounts(
+  cpiProgramId: PublicKeyInitData,
+  tokenBridgeProgramId: PublicKeyInitData,
+  wormholeProgramId: PublicKeyInitData
+): TokenBridgeDerivedAccounts {
+  const wormholePdas = getWormholeDerivedAccounts(
+    tokenBridgeProgramId,
+    wormholeProgramId
+  );
+  return {
+    tokenBridgeConfig: deriveTokenBridgeConfigKey(tokenBridgeProgramId),
+    tokenBridgeAuthoritySigner: deriveAuthoritySignerKey(tokenBridgeProgramId),
+    tokenBridgeCustodySigner: deriveCustodySignerKey(tokenBridgeProgramId),
+    tokenBridgeMintAuthority: deriveMintAuthorityKey(tokenBridgeProgramId),
+    tokenBridgeSender: deriveSenderAccountKey(cpiProgramId),
+    tokenBridgeRedeemer: deriveRedeemerAccountKey(cpiProgramId),
+    ...wormholePdas,
+  };
+}
+
+export interface TransferNativeWithPayloadCpiAccounts
+  extends TokenBridgeNativeSenderDerivedAccounts {
+  payer: PublicKey;
+  /**
+   * seeds = [mint], seeds::program = tokenBridgeProgram
+   */
+  tokenBridgeCustody: PublicKey;
+  /**
+   * Token account where tokens reside
+   */
+  fromTokenAccount: PublicKey;
+  mint: PublicKey;
+  wormholeMessage: PublicKey;
+  clock: PublicKey;
   rent: PublicKey;
   systemProgram: PublicKey;
   tokenProgram: PublicKey;
@@ -128,12 +196,9 @@ export function getTransferNativeWithPayloadCpiAccounts(
   };
 }
 
-export interface TransferWrappedWithPayloadCpiAccounts {
+export interface TransferWrappedWithPayloadCpiAccounts
+  extends TokenBridgeWrappedSenderDerivedAccounts {
   payer: PublicKey;
-  /**
-   * seeds = ["config"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeConfig: PublicKey;
   /**
    * Token account where tokens reside
    */
@@ -150,32 +215,8 @@ export interface TransferWrappedWithPayloadCpiAccounts {
    * seeds = ["meta", mint], seeds::program = tokenBridgeProgram
    */
   tokenBridgeWrappedMeta: PublicKey;
-  /**
-   * seeds = ["authority_signer"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeAuthoritySigner: PublicKey;
-  /**
-   * seeds = ["Bridge"], seeds::program = wormholeProgram
-   */
-  wormholeConfig: PublicKey;
   wormholeMessage: PublicKey;
-  /**
-   * seeds = ["emitter"], seeds::program = tokenBridgeProgram
-   */
-  wormholeEmitter: PublicKey;
-  /**
-   * seeds = ["Sequence", wormholeEmitter], seeds::program = wormholeProgram
-   */
-  wormholeSequence: PublicKey;
-  /**
-   * seeds = ["fee_collector"], seeds::program = wormholeProgram
-   */
-  wormholeFeeCollector: PublicKey;
   clock: PublicKey;
-  /**
-   * seeds = ["sender"], seeds::program = cpiProgramId
-   */
-  tokenBridgeSender: PublicKey;
   rent: PublicKey;
   systemProgram: PublicKey;
   tokenProgram: PublicKey;
@@ -241,12 +282,9 @@ export function getTransferWrappedWithPayloadCpiAccounts(
   };
 }
 
-export interface CompleteTransferNativeWithPayloadCpiAccounts {
+export interface CompleteTransferNativeWithPayloadCpiAccounts
+  extends TokenBridgeNativeRedeemerDerivedAccounts {
   payer: PublicKey;
-  /**
-   * seeds = ["config"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeConfig: PublicKey;
   /**
    * seeds = ["PostedVAA", vaa_hash], seeds::program = wormholeProgram
    */
@@ -263,20 +301,12 @@ export interface CompleteTransferNativeWithPayloadCpiAccounts {
    * Token account to receive tokens
    */
   toTokenAccount: PublicKey;
-  /**
-   * seeds = ["redeemer"], seeds::program = cpiProgramId
-   */
-  tokenBridgeRedeemer: PublicKey;
   toFeesTokenAccount: PublicKey; // this shouldn't exist?
   /**
    * seeds = [mint], seeds::program = tokenBridgeProgram
    */
   tokenBridgeCustody: PublicKey;
   mint: PublicKey;
-  /**
-   * seeds = ["custody_signer"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeCustodySigner: PublicKey;
   rent: PublicKey;
   systemProgram: PublicKey;
   tokenProgram: PublicKey;
@@ -336,12 +366,9 @@ export function getCompleteTransferNativeWithPayloadCpiAccounts(
   };
 }
 
-export interface CompleteTransferWrappedWithPayloadCpiAccounts {
+export interface CompleteTransferWrappedWithPayloadCpiAccounts
+  extends TokenBridgeWrappedRedeemerDerivedAccounts {
   payer: PublicKey;
-  /**
-   * seeds = ["config"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeConfig: PublicKey;
   /**
    * seeds = ["PostedVAA", vaa_hash], seeds::program = wormholeProgram
    */
@@ -358,10 +385,6 @@ export interface CompleteTransferWrappedWithPayloadCpiAccounts {
    * Token account to receive tokens
    */
   toTokenAccount: PublicKey;
-  /**
-   * seeds = ["redeemer"], seeds::program = cpiProgramId
-   */
-  tokenBridgeRedeemer: PublicKey;
   toFeesTokenAccount: PublicKey; // this shouldn't exist?
   /**
    * seeds = ["wrapped", token_chain, token_address], seeds::program = tokenBridgeProgram
@@ -371,10 +394,6 @@ export interface CompleteTransferWrappedWithPayloadCpiAccounts {
    * seeds = ["meta", mint], seeds::program = tokenBridgeProgram
    */
   tokenBridgeWrappedMeta: PublicKey;
-  /**
-   * seeds = ["mint_signer"], seeds::program = tokenBridgeProgram
-   */
-  tokenBridgeMintAuthority: PublicKey;
   rent: PublicKey;
   systemProgram: PublicKey;
   tokenProgram: PublicKey;
