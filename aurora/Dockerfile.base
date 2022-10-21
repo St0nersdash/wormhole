@@ -1,5 +1,18 @@
 FROM rust:1.60@sha256:48d3b5baf199dc7c378e775c47b0c40aaf7d8b23eaf67e15b095bbdaaecd1f10 as aurora-node
 
-RUN rustup update
+RUN rustup install nightly-2021-03-25
+RUN rustup target add wasm32-unknown-unknown --toolchain nightly-2021-03-25
+RUN cargo install --force cargo-make
 
-RUN apt-get install npm --no-install-recommends
+RUN apt-get update
+RUN apt-get -y install npm --no-install-recommends
+RUN npm install -g n
+RUN n stable
+
+WORKDIR /tmp
+
+RUN npm i near-cli aurora-cli
+
+RUN git clone https://github.com/aurora-is-near/aurora-engine.git
+WORKDIR /tmp/aurora-engine
+RUN cargo make --profile local build
