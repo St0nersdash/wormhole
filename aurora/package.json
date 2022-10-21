@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@auroraisnear/cli": "github:aurora-is-near/aurora-cli",
+    "near-cli": "^3.4.2"
+  }
+}

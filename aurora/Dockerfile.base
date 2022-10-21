@@ -11,7 +11,7 @@ RUN n stable
 
 WORKDIR /tmp
 
-RUN npm i near-cli aurora-cli
+RUN npm i near-cli aurora-is-near/aurora-cli
 
 RUN git clone https://github.com/aurora-is-near/aurora-engine.git
 WORKDIR /tmp/aurora-engine
