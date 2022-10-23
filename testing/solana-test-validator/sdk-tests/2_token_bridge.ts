@@ -151,11 +151,11 @@ describe("Token Bridge", () => {
       const accounts = getInitializeAccounts(TOKEN_BRIDGE_ADDRESS, payer);
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -172,11 +172,11 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "8xGY7Bx9cWocPYpKRe3sjCYTdm3YchFJFHmJC5FenW6B"
       );
@@ -195,11 +195,11 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 2:  Complete Native", () => {
@@ -235,7 +235,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -248,20 +248,20 @@ describe("Token Bridge", () => {
       expect(accounts.endpoint.toString()).to.equal(
         "4CgrjMnDneBjBBEyXtcikLTbAWpHAD1cwn8W1sSSCLru"
       );
-      expect(accounts.to.equals(mintAta)).to.be.true;
-      expect(accounts.toFees.equals(mintAta)).to.be.true;
+      expect(accounts.to.equals(mintAta)).is.true;
+      expect(accounts.toFees.equals(mintAta)).is.true;
       expect(accounts.custody.toString()).to.equal(
         "2Aczo4H847TNDsPradsVXQUZFquJ37ZoHhRmJ2MAqtiM"
       );
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.custodySigner.toString()).to.equal(
         "Eb8xqkMEZYeTnDse4BgWiHVByeUj3JDpgbuz98pWdgPE"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 3:  Complete Wrapped", () => {
@@ -303,7 +303,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -316,20 +316,20 @@ describe("Token Bridge", () => {
       expect(accounts.endpoint.toString()).to.equal(
         "4CgrjMnDneBjBBEyXtcikLTbAWpHAD1cwn8W1sSSCLru"
       );
-      expect(accounts.to.equals(mintAta)).to.be.true;
-      expect(accounts.toFees.equals(mintAta)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.to.equals(mintAta)).is.true;
+      expect(accounts.toFees.equals(mintAta)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "AWUK8RTEBvUNAWLz1VfagK3rnvJ9oLDZPBJEBCzpjqj7"
       );
       expect(accounts.mintAuthority.toString()).to.equal(
         "J2mhpFfGCwHtUjmeQGhJSa2yk5h3egRoSd1AUhaKx2WG"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 4:  Transfer Wrapped", () => {
@@ -355,13 +355,13 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
-      expect(accounts.fromOwner.equals(payer)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
+      expect(accounts.fromOwner.equals(payer)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "AWUK8RTEBvUNAWLz1VfagK3rnvJ9oLDZPBJEBCzpjqj7"
       );
@@ -380,12 +380,12 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 5:  Transfer Native", () => {
@@ -402,12 +402,12 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.custody.toString()).to.equal(
         "2Aczo4H847TNDsPradsVXQUZFquJ37ZoHhRmJ2MAqtiM"
       );
@@ -429,12 +429,12 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 6:  Register Chain", () => {
@@ -458,7 +458,7 @@ describe("Token Bridge", () => {
 
       // verify accounts
       const parsed = parseGovernanceVaa(signedVaa);
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -471,10 +471,10 @@ describe("Token Bridge", () => {
       expect(accounts.claim.toString()).to.equal(
         "J5LWxMcXo1xmdZq57VD4wrUgvw5taizQ9QEPHooHTwJv"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 7:  Create Wrapped", () => {
@@ -502,7 +502,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -527,14 +527,14 @@ describe("Token Bridge", () => {
       expect(accounts.mintAuthority.toString()).to.equal(
         "J2mhpFfGCwHtUjmeQGhJSa2yk5h3egRoSd1AUhaKx2WG"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
       expect(
         accounts.splMetadataProgram.equals(SplTokenMetadataProgram.programId)
-      ).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      ).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 8:  Upgrade Contract", () => {
@@ -558,7 +558,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.vaa.toString()).to.equal(
         "HM2U2HEfbjrkvYLvry8Sqfmd5cCVxq6RjdLUUrNW2ELR"
       );
@@ -568,18 +568,18 @@ describe("Token Bridge", () => {
       expect(accounts.upgradeAuthority.toString()).to.equal(
         "B2LFmpNCkfBFpoorLy4BghGbZyi5sdRsbjxSSASpjUoA"
       );
-      expect(accounts.spill.equals(payer)).to.be.true;
-      expect(accounts.implementation.equals(implementation)).to.be.true;
+      expect(accounts.spill.equals(payer)).is.true;
+      expect(accounts.implementation.equals(implementation)).is.true;
       expect(accounts.programData.toString()).to.equal(
         "3zHkdon6x9fUVqjxu6fCgdp3qMxLFZz59pj1H2NtnbGe"
       );
       expect(accounts.tokenBridgeProgram.equals(TOKEN_BRIDGE_ADDRESS)).to.be
         .true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
       expect(
         accounts.bpfLoaderUpgradeable.equals(BpfLoaderUpgradeable.programId)
-      ).to.be.true;
+      ).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -607,13 +607,13 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
-      expect(accounts.fromOwner.equals(payer)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
+      expect(accounts.fromOwner.equals(payer)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "AWUK8RTEBvUNAWLz1VfagK3rnvJ9oLDZPBJEBCzpjqj7"
       );
@@ -632,13 +632,13 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.sender.equals(payer)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.sender.equals(payer)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 12: Transfer Native With Payload", () => {
@@ -655,11 +655,11 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
       expect(accounts.custody.toString()).to.equal(
         "2Aczo4H847TNDsPradsVXQUZFquJ37ZoHhRmJ2MAqtiM"
       );
@@ -681,13 +681,13 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.sender.equals(payer)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.sender.equals(payer)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
   });
 
@@ -740,7 +740,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.tokenBridgeConfig.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -753,23 +753,23 @@ describe("Token Bridge", () => {
       expect(accounts.tokenBridgeForeignEndpoint.toString()).to.equal(
         "4CgrjMnDneBjBBEyXtcikLTbAWpHAD1cwn8W1sSSCLru"
       );
-      expect(accounts.toTokenAccount.equals(mintAta)).to.be.true;
+      expect(accounts.toTokenAccount.equals(mintAta)).is.true;
       expect(accounts.tokenBridgeRedeemer.toString()).to.equal(
         "A2SNTmahH9ryK2PupNMfKibPPaMtcfYBSX4WjZchhatX"
       );
-      expect(accounts.toFeesTokenAccount.equals(mintAta)).to.be.true;
+      expect(accounts.toFeesTokenAccount.equals(mintAta)).is.true;
       expect(accounts.tokenBridgeCustody.toString()).to.equal(
         "2Aczo4H847TNDsPradsVXQUZFquJ37ZoHhRmJ2MAqtiM"
       );
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.tokenBridgeCustodySigner.toString()).to.equal(
         "Eb8xqkMEZYeTnDse4BgWiHVByeUj3JDpgbuz98pWdgPE"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("getCompleteTransferWrappedWithPayloadCpiAccounts", () => {
@@ -812,7 +812,7 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.tokenBridgeConfig.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
@@ -825,23 +825,23 @@ describe("Token Bridge", () => {
       expect(accounts.tokenBridgeForeignEndpoint.toString()).to.equal(
         "4CgrjMnDneBjBBEyXtcikLTbAWpHAD1cwn8W1sSSCLru"
       );
-      expect(accounts.toTokenAccount.equals(mintAta)).to.be.true;
+      expect(accounts.toTokenAccount.equals(mintAta)).is.true;
       expect(accounts.tokenBridgeRedeemer.toString()).to.equal(
         "A2SNTmahH9ryK2PupNMfKibPPaMtcfYBSX4WjZchhatX"
       );
-      expect(accounts.toFeesTokenAccount.equals(mintAta)).to.be.true;
-      expect(accounts.tokenBridgeWrappedMint.equals(mint)).to.be.true;
+      expect(accounts.toFeesTokenAccount.equals(mintAta)).is.true;
+      expect(accounts.tokenBridgeWrappedMint.equals(mint)).is.true;
       expect(accounts.tokenBridgeWrappedMeta.toString()).to.equal(
         "AWUK8RTEBvUNAWLz1VfagK3rnvJ9oLDZPBJEBCzpjqj7"
       );
       expect(accounts.tokenBridgeMintAuthority.toString()).to.equal(
         "J2mhpFfGCwHtUjmeQGhJSa2yk5h3egRoSd1AUhaKx2WG"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("getTransferWrappedWithPayloadCpiAccounts", () => {
@@ -867,13 +867,13 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.tokenBridgeConfig.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.fromTokenAccount.equals(mintAta)).to.be.true;
-      expect(accounts.fromTokenAccountOwner.equals(cpiProgramId)).to.be.true;
-      expect(accounts.tokenBridgeWrappedMint.equals(mint)).to.be.true;
+      expect(accounts.fromTokenAccount.equals(mintAta)).is.true;
+      expect(accounts.fromTokenAccountOwner.equals(cpiProgramId)).is.true;
+      expect(accounts.tokenBridgeWrappedMint.equals(mint)).is.true;
       expect(accounts.tokenBridgeWrappedMeta.toString()).to.equal(
         "AWUK8RTEBvUNAWLz1VfagK3rnvJ9oLDZPBJEBCzpjqj7"
       );
@@ -892,15 +892,15 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
       expect(accounts.tokenBridgeSender.toString()).to.equal(
         "7r3GbMGbRRp3cbPRPv9v5GBktxGpDmK5LBnvjDVxsEDN"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("getTransferNativeWithPayloadCpiAccounts", () => {
@@ -918,11 +918,11 @@ describe("Token Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.tokenBridgeConfig.toString()).to.equal(
         "GnQ6fGttTRnJpAJuy2XEg5TLgEMtbyU4HDJnBWmojsTv"
       );
-      expect(accounts.fromTokenAccount.equals(mintAta)).to.be.true;
+      expect(accounts.fromTokenAccount.equals(mintAta)).is.true;
       expect(accounts.tokenBridgeCustody.toString()).to.equal(
         "2Aczo4H847TNDsPradsVXQUZFquJ37ZoHhRmJ2MAqtiM"
       );
@@ -944,15 +944,15 @@ describe("Token Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
       expect(accounts.tokenBridgeSender.toString()).to.equal(
         "7r3GbMGbRRp3cbPRPv9v5GBktxGpDmK5LBnvjDVxsEDN"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
   });
 
@@ -1070,7 +1070,7 @@ describe("Token Bridge", () => {
         expect(messageData.sequence).to.equal(0n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const assetMeta = parseAttestMetaPayload(messageData.payload);
@@ -1163,7 +1163,7 @@ describe("Token Bridge", () => {
         expect(messageData.sequence).to.equal(1n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const tokenTransfer = parseTokenTransferPayload(messageData.payload);
@@ -1384,7 +1384,7 @@ describe("Token Bridge", () => {
         expect(messageData.sequence).to.equal(2n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const tokenTransfer = parseTokenTransferPayload(messageData.payload);
@@ -1399,7 +1399,7 @@ describe("Token Bridge", () => {
         expect(tokenTransfer.fromAddress).is.not.null;
         expect(
           new web3.PublicKey(tokenTransfer.fromAddress!).equals(wallet.key())
-        ).to.be.true;
+        ).is.true;
         expect(Buffer.compare(tokenTransfer.to, targetAddress)).to.equal(0);
         expect(tokenTransfer.toChain).to.equal(targetChain);
         expect(
@@ -1506,7 +1506,7 @@ describe("Token Bridge", () => {
           mintInfo.mintAuthority?.equals(
             deriveMintAuthorityKey(TOKEN_BRIDGE_ADDRESS)
           )
-        ).to.be.true;
+        ).is.true;
         expect(mintInfo.supply).to.equal(0n);
 
         // check wrapped meta
@@ -1727,7 +1727,7 @@ describe("Token Bridge", () => {
         expect(messageData.sequence).to.equal(3n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const tokenTransfer = parseTokenTransferPayload(messageData.payload);
@@ -1829,7 +1829,7 @@ describe("Token Bridge", () => {
         expect(messageData.sequence).to.equal(4n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const tokenTransfer = parseTokenTransferPayload(messageData.payload);
@@ -1906,7 +1906,7 @@ describe("Token Bridge", () => {
         );
 
         // verify results
-        expect(asset.isWrapped).to.be.true;
+        expect(asset.isWrapped).is.true;
         expect(asset.chainId).to.equal(tokenChain);
         expect(
           Buffer.compare(Buffer.from(asset.assetAddress), tokenAddress)
@@ -1975,7 +1975,7 @@ describe("Token Bridge", () => {
         );
 
         // verify results
-        expect(isWrapped).to.be.true;
+        expect(isWrapped).is.true;
       });
     });
   });

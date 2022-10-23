@@ -180,11 +180,11 @@ describe("NFT Bridge", () => {
       const accounts = getInitializeAccounts(NFT_BRIDGE_ADDRESS, payer);
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -223,7 +223,7 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
@@ -236,20 +236,20 @@ describe("NFT Bridge", () => {
       expect(accounts.endpoint.toString()).to.equal(
         "GGobvHkLNgwD7qnMRLFniLjoAtr12H4bqPD6AEHWzCou"
       );
-      expect(accounts.to.equals(mintAta)).to.be.true;
-      expect(accounts.toAuthority.equals(payer)).to.be.true;
+      expect(accounts.to.equals(mintAta)).is.true;
+      expect(accounts.toAuthority.equals(payer)).is.true;
       expect(accounts.custody.toString()).to.equal(
         "3ju9P66Ng9PEPhjY9HUDiC6taExZgWGULTERcP8RzT2j"
       );
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.custodySigner.toString()).to.equal(
         "HHJPgZGoLrh8VmpmR4kPWmVoo8SZyAWQAVe15UtFJKQ1"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 2: Complete Wrapped", () => {
@@ -297,7 +297,7 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
@@ -310,26 +310,26 @@ describe("NFT Bridge", () => {
       expect(accounts.endpoint.toString()).to.equal(
         "GGobvHkLNgwD7qnMRLFniLjoAtr12H4bqPD6AEHWzCou"
       );
-      expect(accounts.to.equals(mintAta)).to.be.true;
-      expect(accounts.toAuthority.equals(payer)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.to.equals(mintAta)).is.true;
+      expect(accounts.toAuthority.equals(payer)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "GjxBVsD3fHPa3R97B4uA6TaMbuKXrQ9So8ktdNA6agXs"
       );
       expect(accounts.mintAuthority.toString()).to.equal(
         "ESeW7kNyP8mvfeqKkZdWkuFsKYeZnQUbrxYnNL8N11hi"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
       expect(
         accounts.splMetadataProgram.equals(SplTokenMetadataProgram.programId)
-      ).to.be.true;
+      ).is.true;
       expect(
         accounts.associatedTokenProgram.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
-      ).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      ).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 3: Complete Wrapped Meta", () => {
@@ -377,7 +377,7 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
@@ -387,7 +387,7 @@ describe("NFT Bridge", () => {
       expect(accounts.endpoint.toString()).to.equal(
         "GGobvHkLNgwD7qnMRLFniLjoAtr12H4bqPD6AEHWzCou"
       );
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "GjxBVsD3fHPa3R97B4uA6TaMbuKXrQ9So8ktdNA6agXs"
       );
@@ -397,14 +397,14 @@ describe("NFT Bridge", () => {
       expect(accounts.mintAuthority.toString()).to.equal(
         "ESeW7kNyP8mvfeqKkZdWkuFsKYeZnQUbrxYnNL8N11hi"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
       expect(
         accounts.splMetadataProgram.equals(SplTokenMetadataProgram.programId)
-      ).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      ).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 4: Transfer Wrapped", () => {
@@ -433,13 +433,13 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
-      expect(accounts.fromOwner.equals(payer)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
+      expect(accounts.fromOwner.equals(payer)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.wrappedMeta.toString()).to.equal(
         "GjxBVsD3fHPa3R97B4uA6TaMbuKXrQ9So8ktdNA6agXs"
       );
@@ -452,7 +452,7 @@ describe("NFT Bridge", () => {
       expect(accounts.wormholeConfig.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
-      expect(accounts.wormholeMessage.equals(message.publicKey)).to.be.true;
+      expect(accounts.wormholeMessage.equals(message.publicKey)).is.true;
       expect(accounts.wormholeEmitter.toString()).to.equal(
         "6rbfWsCH5vFbwKAkaAvBSP1Mom6ZkCaCk2pGAbxWt1CH"
       );
@@ -462,15 +462,15 @@ describe("NFT Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
       expect(
         accounts.splMetadataProgram.equals(SplTokenMetadataProgram.programId)
-      ).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      ).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 5: Transfer Native", () => {
@@ -488,12 +488,12 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
-      expect(accounts.from.equals(mintAta)).to.be.true;
-      expect(accounts.mint.equals(mint)).to.be.true;
+      expect(accounts.from.equals(mintAta)).is.true;
+      expect(accounts.mint.equals(mint)).is.true;
       expect(accounts.splMetadata.toString()).to.equal(
         "6dM4TqWyWJsbx7obrdLcviBkTafD5E8av61zfU6jq57X"
       );
@@ -509,7 +509,7 @@ describe("NFT Bridge", () => {
       expect(accounts.wormholeConfig.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
-      expect(accounts.wormholeMessage.equals(message.publicKey)).to.be.true;
+      expect(accounts.wormholeMessage.equals(message.publicKey)).is.true;
       expect(accounts.wormholeEmitter.toString()).to.equal(
         "6rbfWsCH5vFbwKAkaAvBSP1Mom6ZkCaCk2pGAbxWt1CH"
       );
@@ -519,15 +519,15 @@ describe("NFT Bridge", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).to.be.true;
+      expect(accounts.tokenProgram.equals(TOKEN_PROGRAM_ID)).is.true;
       expect(
         accounts.splMetadataProgram.equals(SplTokenMetadataProgram.programId)
-      ).to.be.true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      ).is.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 6: Register Chain", () => {
@@ -550,7 +550,7 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.config.toString()).to.equal(
         "J1oLBQPejgP75y9mKAAfftaQtmLhLkuQzbCufmYKMSQz"
       );
@@ -563,10 +563,10 @@ describe("NFT Bridge", () => {
       expect(accounts.claim.toString()).to.equal(
         "6QuJAFuXYpz8WvzbMoS41mFki5mdLQswhkxoccg2tmTS"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
     });
 
     it("Instruction 7: Upgrade Contract", () => {
@@ -590,7 +590,7 @@ describe("NFT Bridge", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.vaa.toString()).to.equal(
         "Evar3arhnjy84wPDUpKPifxFRT9oRJFzwYZAVUKpsTnd"
       );
@@ -600,17 +600,17 @@ describe("NFT Bridge", () => {
       expect(accounts.upgradeAuthority.toString()).to.equal(
         "8GUsAHTGAjJv5XgdQrHprwVnzqARbWaxZ3GHvquhZhpp"
       );
-      expect(accounts.spill.equals(payer)).to.be.true;
-      expect(accounts.implementation.equals(implementation)).to.be.true;
+      expect(accounts.spill.equals(payer)).is.true;
+      expect(accounts.implementation.equals(implementation)).is.true;
       expect(accounts.programData.toString()).to.equal(
         "2oC7qvaYxBLg1msKS8rPgEab5VSQ7TUFfhJBv75BzdSS"
       );
-      expect(accounts.nftBridgeProgram.equals(NFT_BRIDGE_ADDRESS)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
+      expect(accounts.nftBridgeProgram.equals(NFT_BRIDGE_ADDRESS)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
       expect(
         accounts.bpfLoaderUpgradeable.equals(BpfLoaderUpgradeable.programId)
-      ).to.be.true;
+      ).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -757,7 +757,7 @@ describe("NFT Bridge", () => {
         expect(messageData.sequence).to.equal(0n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const nftTransfer = parseNftTransferPayload(messageData.payload);
@@ -1127,7 +1127,7 @@ describe("NFT Bridge", () => {
         expect(messageData.sequence).to.equal(1n);
         expect(messageData.vaaTime).to.equal(0);
         expect(messageData.vaaSignatureAccount.equals(web3.PublicKey.default))
-          .to.be.true;
+          .is.true;
         expect(messageData.vaaVersion).to.equal(0);
 
         const nftTransfer = parseNftTransferPayload(messageData.payload);
@@ -1210,7 +1210,7 @@ describe("NFT Bridge", () => {
         );
 
         // verify results
-        expect(asset.isWrapped).to.be.true;
+        expect(asset.isWrapped).is.true;
         expect(asset.chainId).to.equal(tokenChain);
         expect(
           Buffer.compare(Buffer.from(asset.assetAddress), tokenAddress)
@@ -1283,7 +1283,7 @@ describe("NFT Bridge", () => {
         );
 
         // verify results
-        expect(isWrapped).to.be.true;
+        expect(isWrapped).is.true;
       });
     });
   });

@@ -21,6 +21,7 @@ import {
   getUpgradeGuardianSetAccounts,
   getVerifySignatureAccounts,
   getUpgradeContractAccounts,
+  getSignatureSetData,
 } from "../../../sdk/js/src/solana/wormhole";
 import { postVaa } from "../../../sdk/js/src/solana/sendAndConfirmPostVaa";
 import {
@@ -72,7 +73,7 @@ describe("Wormhole (Core Bridge)", () => {
       const accounts = getInitializeAccounts(CORE_BRIDGE_ADDRESS, payer);
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
@@ -82,8 +83,8 @@ describe("Wormhole (Core Bridge)", () => {
       expect(accounts.feeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -99,11 +100,11 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
-      expect(accounts.message.equals(message.publicKey)).to.be.true;
+      expect(accounts.message.equals(message.publicKey)).is.true;
       expect(accounts.emitter.toString()).to.equal(
         "Ard2Zy4HckbJS2bL7y4361wbKSUH68JZqYBura5d4xtw"
       );
@@ -113,8 +114,8 @@ describe("Wormhole (Core Bridge)", () => {
       expect(accounts.feeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -141,19 +142,19 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.guardianSet.toString()).to.equal(
         "BJmSHooX4QJCTE4bn5G2Pv6in1nLGyWvL3jxWmT5Avdm"
       );
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
-      expect(accounts.signatureSet.equals(signatureSet.publicKey)).to.be.true;
+      expect(accounts.signatureSet.equals(signatureSet.publicKey)).is.true;
       expect(accounts.vaa.toString()).to.equal(
         "5UfHDKqHwQnMtHjnqfpZJxmAeCyMWD7kYEPcfeKQwvRY"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -175,7 +176,7 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
@@ -210,7 +211,7 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
@@ -223,7 +224,7 @@ describe("Wormhole (Core Bridge)", () => {
       expect(accounts.feeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -248,7 +249,7 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
@@ -261,17 +262,17 @@ describe("Wormhole (Core Bridge)", () => {
       expect(accounts.upgradeAuthority.toString()).to.equal(
         "2Esys2cab9dkWeApHewy7nqx6tNUWKGtFchyhRpzGmR6"
       );
-      expect(accounts.spill.equals(payer)).to.be.true;
-      expect(accounts.implementation.equals(implementation)).to.be.true;
+      expect(accounts.spill.equals(payer)).is.true;
+      expect(accounts.implementation.equals(implementation)).is.true;
       expect(accounts.programData.toString()).to.equal(
         "Bi88esKkELCqVAYUFjREwnWjeK4RUWecHv7VxZQtVj4f"
       );
-      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
+      expect(accounts.wormholeProgram.equals(CORE_BRIDGE_ADDRESS)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
       expect(
         accounts.bpfLoaderUpgradeable.equals(BpfLoaderUpgradeable.programId)
-      ).to.be.true;
+      ).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -294,7 +295,7 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.bridge.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
@@ -336,14 +337,14 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.guardianSet.toString()).to.equal(
         "BJmSHooX4QJCTE4bn5G2Pv6in1nLGyWvL3jxWmT5Avdm"
       );
-      expect(accounts.signatureSet.equals(signatureSet.publicKey)).to.be.true;
+      expect(accounts.signatureSet.equals(signatureSet.publicKey)).is.true;
       expect(accounts.instructions.equals(web3.SYSVAR_INSTRUCTIONS_PUBKEY)).to
         .be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -370,11 +371,11 @@ describe("Wormhole (Core Bridge)", () => {
       );
 
       // verify accounts
-      expect(accounts.payer.equals(payer)).to.be.true;
+      expect(accounts.payer.equals(payer)).is.true;
       expect(accounts.wormholeConfig.toString()).to.equal(
         "DNN2VhmrGTGj6QVnPz4NVfsiSk64cRHzKBLP5kUaQrf8"
       );
-      expect(accounts.wormholeMessage.equals(message.publicKey)).to.be.true;
+      expect(accounts.wormholeMessage.equals(message.publicKey)).is.true;
       expect(accounts.wormholeEmitter.toString()).to.equal(
         "Ernk5wzhwTPJDbmTNnELqhxW5J85CH45qJSTsGkKpGYK"
       );
@@ -384,8 +385,8 @@ describe("Wormhole (Core Bridge)", () => {
       expect(accounts.wormholeFeeCollector.toString()).to.equal(
         "Cxt3Uka7X8vyHYjU6szcuYVPPFyg1fAtoeVy7eyzPjGV"
       );
-      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).to.be.true;
-      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).to.be.true;
+      expect(accounts.clock.equals(web3.SYSVAR_CLOCK_PUBKEY)).is.true;
+      expect(accounts.rent.equals(web3.SYSVAR_RENT_PUBKEY)).is.true;
       expect(accounts.systemProgram.equals(web3.SystemProgram.programId)).to.be
         .true;
     });
@@ -413,7 +414,8 @@ describe("Wormhole (Core Bridge)", () => {
           consistencyLevel,
           timestamp
         );
-        const signedVaa = guardians.addSignatures(published, [0]);
+        const signingGuardians = [0];
+        const signedVaa = guardians.addSignatures(published, signingGuardians);
         // console.log(`signedVaa: ${signedVaa.toString("base64")}`);
 
         const txSignatures = await postVaa(
@@ -451,6 +453,19 @@ describe("Wormhole (Core Bridge)", () => {
         expect(messageData.vaaTime).to.equal(timestamp);
         expect(messageData.vaaTime).to.equal(parsed.timestamp);
         expect(messageData.vaaVersion).to.equal(parsed.version);
+
+        const signatureSetData = await getSignatureSetData(
+          connection,
+          messageData.vaaSignatureAccount
+        );
+        const signed = signatureSetData.signatures;
+        expect(signed).has.length(1);
+        expect(signed.filter((x) => !x)).has.length(0);
+        for (const i of signingGuardians) {
+          expect(signed[i]).is.true;
+        }
+        expect(Buffer.compare(signatureSetData.hash, parsed.hash)).to.equal(0);
+        expect(signatureSetData.guardianSetIndex).to.equal(guardians.setIndex);
       });
 
       // it("Post Message Unreliable", () => {
@@ -624,10 +639,8 @@ describe("Wormhole (Core Bridge)", () => {
           message,
           consistencyLevel
         );
-        const signedVaa = guardians.addSignatures(
-          published,
-          [0, 1, 2, 3, 5, 7, 8, 9, 10, 12, 15, 16, 18]
-        );
+        const signingGuardians = [0, 1, 2, 3, 5, 7, 8, 9, 10, 12, 15, 16, 18];
+        const signedVaa = guardians.addSignatures(published, signingGuardians);
         // console.log(`signedVaa: ${signedVaa.toString("base64")}`);
 
         const txSignatures = await postVaa(
@@ -663,6 +676,21 @@ describe("Wormhole (Core Bridge)", () => {
         expect(messageData.sequence).to.equal(parsed.sequence);
         expect(messageData.vaaTime).to.equal(parsed.timestamp);
         expect(messageData.vaaVersion).to.equal(parsed.version);
+
+        const signatureSetData = await getSignatureSetData(
+          connection,
+          messageData.vaaSignatureAccount
+        );
+        const signed = signatureSetData.signatures;
+        expect(signed).has.length(guardians.signers.length);
+        expect(signed.filter((x) => !x)).has.length(
+          19 - signingGuardians.length
+        );
+        for (const i of signingGuardians) {
+          expect(signed[i]).is.true;
+        }
+        expect(Buffer.compare(signatureSetData.hash, parsed.hash)).to.equal(0);
+        expect(signatureSetData.guardianSetIndex).to.equal(guardians.setIndex);
       });
 
       it("Post VAA Signed with 19 Guardians", async () => {
@@ -674,9 +702,8 @@ describe("Wormhole (Core Bridge)", () => {
           message,
           consistencyLevel
         );
-        const signedVaa = guardians.addSignatures(published, [
-          ...Array(19).keys(),
-        ]);
+        const signingGuardians = [...Array(19).keys()];
+        const signedVaa = guardians.addSignatures(published, signingGuardians);
         // console.log(`signedVaa: ${signedVaa.toString("base64")}`);
 
         const txSignatures = await postVaa(
@@ -712,6 +739,21 @@ describe("Wormhole (Core Bridge)", () => {
         expect(messageData.sequence).to.equal(parsed.sequence);
         expect(messageData.vaaTime).to.equal(parsed.timestamp);
         expect(messageData.vaaVersion).to.equal(parsed.version);
+
+        const signatureSetData = await getSignatureSetData(
+          connection,
+          messageData.vaaSignatureAccount
+        );
+        const signed = signatureSetData.signatures;
+        expect(signed).has.length(guardians.signers.length);
+        expect(signed.filter((x) => !x)).has.length(
+          19 - signingGuardians.length
+        );
+        for (const i of signingGuardians) {
+          expect(signed[i]).is.true;
+        }
+        expect(Buffer.compare(signatureSetData.hash, parsed.hash)).to.equal(0);
+        expect(signatureSetData.guardianSetIndex).to.equal(guardians.setIndex);
       });
     });
   });
