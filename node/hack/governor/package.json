@@ -28,7 +28,7 @@
     "@certusone/wormhole-sdk": "^0.10.2",
     "@certusone/wormhole-spydk": "^0.0.1",
     "@solana/spl-token": "^0.1.8",
-    "@solana/web3.js": "^1.24.0",
+    "@solana/web3.js": "^1.91.3",
     "@terra-money/terra.js": "^2.0.14",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
