@@ -36,8 +36,8 @@ require (
 	github.com/tendermint/tendermint v0.34.14
 	github.com/tidwall/gjson v1.14.3
 	go.uber.org/zap v1.23.0
-	golang.org/x/crypto v0.1.0
-	golang.org/x/sys v0.5.0
+	golang.org/x/crypto v0.21.0
+	golang.org/x/sys v0.18.0
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858
 	google.golang.org/api v0.99.0
 	google.golang.org/genproto v0.0.0-20221018160656-63c7b68cfc55
@@ -56,7 +56,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.5-0.20210104140557-80c98217689d
 	github.com/test-go/testify v1.1.4
 	github.com/wormhole-foundation/wormhole/sdk v0.0.0-00010101000000-000000000000
-	golang.org/x/text v0.7.0
+	golang.org/x/text v0.14.0
 )
 
 require (
@@ -218,12 +218,12 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/ratelimit v0.2.0 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/mod v0.8.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20221014153046-6fdb5e3db783 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/term v0.5.0 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	golang.org/x/term v0.18.0 // indirect
+	golang.org/x/tools v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/ini.v1 v1.63.2 // indirect
