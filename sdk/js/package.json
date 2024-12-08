@@ -74,7 +74,7 @@
     "axios": "^1.6.4",
     "bech32": "^2.0.0",
     "binary-parser": "^2.2.1",
-    "elliptic": "^6.5.4",
+    "elliptic": "^6.6.0",
     "js-base64": "^3.6.1",
     "near-api-js": "^1.0.0"
   }
