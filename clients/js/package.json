@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@celo-tools/celo-ethers-wrapper": "^0.1.0",
-    "@certusone/wormhole-sdk": "^0.10.2",
+    "@certusone/wormhole-sdk": "^0.10.18",
     "@cosmjs/encoding": "^0.26.2",
     "@injectivelabs/networks": "^1.0.37",
     "@injectivelabs/sdk-ts": "^1.14.13",
@@ -14,7 +14,7 @@
     "@xpla/xpla.js": "^0.2.1",
     "algosdk": "^1.23.1",
     "aptos": "^1.21.0",
-    "axios": "^1.6.4",
+    "axios": "^1.7.8",
     "binary-parser": "^2.0.2",
     "bn.js": "^5.2.0",
     "bs58": "^4.0.1",
