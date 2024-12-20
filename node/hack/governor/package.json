@@ -27,7 +27,7 @@
   "dependencies": {
     "@certusone/wormhole-sdk": "^0.10.18",
     "@certusone/wormhole-spydk": "^0.0.1",
-    "@solana/spl-token": "^0.1.8",
+    "@solana/spl-token": "^0.3.2",
     "@solana/web3.js": "^1.24.0",
     "@terra-money/terra.js": "^2.0.14",
     "body-parser": "^1.19.0",
