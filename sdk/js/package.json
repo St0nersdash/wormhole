@@ -71,7 +71,7 @@
     "@xpla/xpla.js": "^1.5.1",
     "algosdk": "^1.23.1",
     "aptos": "^1.21.0",
-    "axios": "^1.6.4",
+    "axios": "^1.8.2",
     "bech32": "^2.0.0",
     "binary-parser": "^2.2.1",
     "elliptic": "^6.5.4",
