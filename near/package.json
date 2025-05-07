@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
-    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-env": "^7.27.1",
     "@babel/preset-react": "^7.13.13",
     "@colors/colors": "^1.5.0",
     "@types/prompt": "^1.1.2",
