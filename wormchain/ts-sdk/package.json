@@ -20,7 +20,7 @@
   "homepage": "https://github.com/wormhole-foundation/wormchain#readme",
   "dependencies": {
     "@certusone/wormhole-sdk": "^0.10.18",
-    "@cosmjs/cosmwasm-stargate": "^0.33.1",
+    "@cosmjs/cosmwasm-stargate": "^0.34.0",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/math": "^0.27.1",
     "@cosmjs/proto-signing": "^0.33.1",
