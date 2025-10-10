@@ -70,7 +70,7 @@
     "@terra-money/terra.js": "^3.1.8",
     "@xpla/xpla.js": "^1.5.1",
     "algosdk": "^1.23.1",
-    "aptos": "^1.21.0",
+    "aptos": "^1.22.1",
     "axios": "^1.8.3",
     "bech32": "^2.0.0",
     "binary-parser": "^2.2.1",
